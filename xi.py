@@ -8,11 +8,11 @@ class PkgStatus(Enum):
     ERROR = 'Errors occurred'
     NOT_SURE = 'Could not determine'
 
-class XBPS(dotbot.Plugin):
-    _directive = 'xbps'
+class XI(dotbot.Plugin):
+    _directive = 'xi'
 
     def __init__(self, context):
-        super(XBPS, self).__init__(self)
+        super(XI, self).__init__(self)
         self._context = context
         self._strings = {}
         self._strings[PkgStatus.UP_TO_DATE] = 'already installed'
@@ -24,7 +24,7 @@ class XBPS(dotbot.Plugin):
 
     def handle(self, directive, data):
         if not self.can_handle(directive):
-            raise ValueError('XBPS cannot handle directive %s' % directive)
+            raise ValueError('XI cannot handle directive %s' % directive)
         return self._process(data)
 
     def _process(self, packages):
@@ -50,15 +50,9 @@ class XBPS(dotbot.Plugin):
         return success
 
     def _install(self, pkg):
-        cmd = 'xbps-install -Sy {}'.format(pkg)
-        with_sudo = ""
+        cmd = 'xi {}'.format(pkg)
 
-        if os.getuid() != 0:
-            cmd = 'sudo ' + cmd
-            with_sudo = "with sudo"
-
-
-        self._log.info('Installing \'{}\' {}'.format(pkg, with_sudo))
+        self._log.info('Installing \'{}\''.format(pkg))
 
         process = subprocess.Popen(cmd,
                                    shell=True,
